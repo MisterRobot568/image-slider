@@ -1,13 +1,17 @@
-console.log('Webpack working');
-console.log('hello');
-console.log('hello');
-const test = 'hello';
-console.log('shit');
-function testing(string) {
-    console.log(string);
-    if (3 > 2) {
-        console.log('hello');
-    }
-}
+import ImageManager from './image-manager';
 
-testing('hello');
+const imageManager = new ImageManager('images');
+// imageManager.method1();
+imageManager.goToImage();
+imageManager.createNavCircles();
+
+// event listeners
+const scrollBackBtn = document.querySelector('#scroll-back-btn');
+const scrollForwardBtn = document.querySelector('#scroll-forward-btn');
+
+scrollBackBtn.addEventListener('click', () => {
+    imageManager.scrollBackImage();
+});
+scrollForwardBtn.addEventListener('click', () => {
+    imageManager.scrollForwardImage();
+});
