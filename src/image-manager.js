@@ -1,4 +1,5 @@
 import getElementIDs from './functions';
+import CircleManager from './circle-manager';
 
 class ImageManager {
     constructor(elementClass) {
@@ -6,6 +7,9 @@ class ImageManager {
 
         const [firstElement] = this.imageIDArr;
         this.currentImageID = firstElement;
+
+        this.navCircleIDs = []; // maybe we'll use this
+        this.currentNavID = `${firstElement}circlebtn`;
     }
 
     showImage() {
@@ -35,9 +39,11 @@ class ImageManager {
             newIndex = currentIndex - 1;
         }
         this.currentImageID = this.imageIDArr[newIndex];
+        this.clearAndHighlightNavBtn();
         this.goToImage();
     }
 
+    // method to scroll forward to the next image (back/forward buttons)
     scrollForwardImage() {
         const currentIndex = this.imageIDArr.indexOf(this.currentImageID);
         let newIndex;
@@ -47,6 +53,12 @@ class ImageManager {
             newIndex = currentIndex + 1;
         }
         this.currentImageID = this.imageIDArr[newIndex];
+        // this.currentNavID = `${this.currentImageID}circlebtn`;
+        // this.clearNavCircles();
+        // this.highlightNavCircle();
+
+        this.clearAndHighlightNavBtn();
+
         this.goToImage();
     }
 
@@ -58,14 +70,53 @@ class ImageManager {
             circleButton.setAttribute('id', `${element}circlebtn`);
             circleButton.setAttribute('type', 'button');
 
-            // circleButton.textContent = 'testing';
+            circleButton.addEventListener('click', () => {
+                this.jumpToImage(element);
+                console.log('circle clicked');
+
+                this.currentNavID = `${element}circlebtn`; // the issue might be in this event listener
+                this.clearNavCircles();
+                this.highlightNavCircle();
+                // this.clearAndHighlightNavBtn();
+            });
 
             circleDiv.appendChild(circleButton);
+            this.navCircleIDs.push(`${element}circlebtn`);
+
+            this.clearAndHighlightNavBtn();
         });
     }
 
     // jumps to specified image based on ID (clicking specific circle)
-    jumpToImage() {}
+    jumpToImage(imageID) {
+        this.hideImages();
+        this.currentImageID = imageID;
+        this.currentNavID = `${imageID}circlebtn`;
+        const image = document.querySelector(`#${imageID}`);
+        image.style.display = 'block';
+        // this.clearNavCircles();
+        // this.highlightNavCircle();
+    }
+
+    // build a function that highlights specific nav circle based on ID
+    highlightNavCircle() {
+        const button = document.querySelector(`#${this.currentNavID}`);
+        button.classList.add('active');
+    }
+
+    clearNavCircles() {
+        this.navCircleIDs.forEach((ID) => {
+            const button = document.querySelector(`#${ID}`);
+            button.classList.remove('active');
+        });
+    }
+
+    clearAndHighlightNavBtn() {
+        this.currentNavID = `${this.currentImageID}circlebtn`;
+        console.log(this.currentNavID);
+        this.clearNavCircles();
+        this.highlightNavCircle();
+    }
 }
 
 export default ImageManager;
