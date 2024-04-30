@@ -1,5 +1,4 @@
 import getElementIDs from './functions';
-import CircleManager from './circle-manager';
 
 class ImageManager {
     constructor(elementClass) {
@@ -10,6 +9,8 @@ class ImageManager {
 
         this.navCircleIDs = []; // maybe we'll use this
         this.currentNavID = `${firstElement}circlebtn`;
+
+        this.autoScroll();
     }
 
     showImage() {
@@ -53,10 +54,6 @@ class ImageManager {
             newIndex = currentIndex + 1;
         }
         this.currentImageID = this.imageIDArr[newIndex];
-        // this.currentNavID = `${this.currentImageID}circlebtn`;
-        // this.clearNavCircles();
-        // this.highlightNavCircle();
-
         this.clearAndHighlightNavBtn();
 
         this.goToImage();
@@ -77,7 +74,6 @@ class ImageManager {
                 this.currentNavID = `${element}circlebtn`; // the issue might be in this event listener
                 this.clearNavCircles();
                 this.highlightNavCircle();
-                // this.clearAndHighlightNavBtn();
             });
 
             circleDiv.appendChild(circleButton);
@@ -94,8 +90,6 @@ class ImageManager {
         this.currentNavID = `${imageID}circlebtn`;
         const image = document.querySelector(`#${imageID}`);
         image.style.display = 'block';
-        // this.clearNavCircles();
-        // this.highlightNavCircle();
     }
 
     // build a function that highlights specific nav circle based on ID
@@ -116,6 +110,18 @@ class ImageManager {
         console.log(this.currentNavID);
         this.clearNavCircles();
         this.highlightNavCircle();
+    }
+
+    autoScroll() {
+        const currentSlide = this.currentImageID;
+        console.log(currentSlide);
+
+        setTimeout(() => {
+            if (currentSlide === this.currentImageID) {
+                this.scrollForwardImage();
+            }
+            this.autoScroll();
+        }, 5000);
     }
 }
 

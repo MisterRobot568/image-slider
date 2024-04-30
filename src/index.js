@@ -1,7 +1,7 @@
 import ImageManager from './image-manager';
 
 const imageManager = new ImageManager('images');
-// imageManager.method1();
+
 imageManager.goToImage();
 imageManager.createNavCircles();
 
